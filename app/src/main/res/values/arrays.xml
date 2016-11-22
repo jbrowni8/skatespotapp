@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spots_array">
+        <item>Select a skate spot type</item>
+        <item>Bank</item>
+        <item>Gap</item>
+        <item>Handrail</item>
+        <item>Other</item>
+        <item>Pool</item>
+        <item>Ramp</item>
+        <item>Skate park</item>
+        <item>Stairs</item>
+        <item>Street</item>
+    </string-array>
+</resources>

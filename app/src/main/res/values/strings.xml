@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Skate spot finder</string>
+    <string name="etQuery">What do you want to skate today?</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="location_permission_denied">denied</string>
+    <string name="permission_required_toast">permission required</string>
+    <string name="permission_rationale_location">permission rational location</string>
+    <string name="enter_some_information_about_the_new_skatespot">Enter info about the new spot</string>
+    <string name="textview">TextView</string>
+    <string name="rating">Rating:</string>
+    <string name="good_for_rainy_days_yes_no">Good for rainy days (Yes/No)?</string>
+    <string name="more_e_g_bad_runway_plugins_available">More (e.g. bad runway, plugins available...):</string>
+    <string name="spot_s_name_e_g_jefferson_5_stair">Spot\'s name (e.g. Jefferson 5 stair):</string>
+    <string name="time_of_day_the_spot_is_accessible">Time of day the spot is accessible:</string>
+    <string name="snap_a_picture_of_the_spot">Snap a picture of the spot</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+
+</resources>
