@@ -10,15 +10,26 @@ import android.os.Parcelable;
 
 public class SkateSpot implements Parcelable{
 
+    public static final Creator<SkateSpot> CREATOR = new Creator<SkateSpot>() {
+        @Override
+        public SkateSpot createFromParcel(Parcel in) {
+            return new SkateSpot(in);
+        }
+
+        @Override
+        public SkateSpot[] newArray(int size) {
+            return new SkateSpot[size];
+        }
+    };
+    protected Location location;
     private String type;
     private String name;
     private String description;
     private boolean covered;
     private float rating;
     private String accessibleTimes;
-    private String lat;
-    private String lon;
-    protected Location location;
+    private double lat;
+    private double lon;
 
     public SkateSpot(String type, String name, String description,
                      boolean covered, float rating, String accessibleTimes, double lat, double lon, Location location) {
@@ -28,20 +39,28 @@ public class SkateSpot implements Parcelable{
         this.covered = covered;
         this.rating = rating;
         this.accessibleTimes = accessibleTimes;
-        this.lat = lat+"";
-        this.lon = lon+"";
+        this.lat = lat;
+        this.lon = lon;
         this.location = location;
     }
 
-    public Location getLocation() {
-        return location;
+    private SkateSpot(Parcel in) {
+        type = in.readString();
+        name = in.readString();
+        description = in.readString();
+        rating = in.readFloat();
+        covered = in.readByte() != 0;
+        accessibleTimes = in.readString();
+        lat = in.readDouble();
+        lon = in.readDouble();
+        //  location = in.readParcelable(Location.class.getClassLoader());
     }
 
-    public String getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public String getLon() {
+    public double getLon() {
         return lon;
     }
 
@@ -72,15 +91,12 @@ public class SkateSpot implements Parcelable{
     @Override
     public String toString() {
         return "SkateSpot{" +
-                "type='" + type + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
+                "type=" + type +
+                ", name=" + name +
+                ", description=" + description +
                 ", covered=" + covered +
                 ", rating=" + rating +
                 ", accessibleTimes='" + accessibleTimes + '\'' +
-                ", lat=" + lat +
-                ", lon=" + lon +
-                ", location=" + location +
                 '}';
     }
 
@@ -114,18 +130,6 @@ public class SkateSpot implements Parcelable{
         return result;
     }
 
-    private SkateSpot(Parcel in) {
-        type = in.readString();
-        name = in.readString();
-        description = in.readString();
-        rating = in.readFloat();
-        covered = in.readByte() != 0;
-        accessibleTimes = in.readString();
-        lat = in.readString();
-        lon = in.readString();
-        location = in.readParcelable(Location.class.getClassLoader());
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -139,20 +143,8 @@ public class SkateSpot implements Parcelable{
         out.writeString(accessibleTimes);
         out.writeFloat(rating);
         out.writeByte((byte) (covered ? 1 : 0));
-        out.writeString(lat+"");
-        out.writeString(lon+"");
-        out.writeParcelable(location, flags);
+        out.writeDouble(lat);
+        out.writeDouble(lon);
+        //  out.writeParcelable(location, flags);
     }
-
-    public static final Creator<SkateSpot> CREATOR = new Creator<SkateSpot>() {
-        @Override
-        public SkateSpot createFromParcel(Parcel in) {
-            return new SkateSpot(in);
-        }
-
-        @Override
-        public SkateSpot[] newArray(int size) {
-            return new SkateSpot[size];
-        }
-    };
 }

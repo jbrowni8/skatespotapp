@@ -52,27 +52,23 @@ public class MapsActivity extends AppCompatActivity
         OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
-    SkateSpot mSpot = null;
-    String name = "";
-
     public static final String TAG = "MapsActivity";
-
-
     /**
      * Request code for location permission request.
      *
      * @see #onRequestPermissionsResult(int, String[], int[])
      */
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
+    protected static GoogleMap mMap;
     protected LocationManager locationManager;
     protected Location myLocation;
+    SkateSpot mSpot = null;
+    String name = "";
     /**
      * Flag indicating whether a requested permission has been denied after returning in
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      */
     private boolean mPermissionDenied = false;
-    protected static GoogleMap mMap;
     private UiSettings mUiSettings;
     private double lat;
     private double lon;
@@ -93,14 +89,20 @@ public class MapsActivity extends AppCompatActivity
         try {
             Intent intent = getIntent();
             mSpot = intent.getParcelableExtra("SkateSpot");
-            lat = Double.parseDouble(mSpot.getLat());
-            lon = Double.parseDouble(mSpot.getLon());
+            try {
+                lat = Double.parseDouble(mSpot.getLat() + "");
+                lon = Double.parseDouble(mSpot.getLon() + "");
+            } catch (NumberFormatException e) {
+                lat = 35.5;
+                lon = -117.585;
+            }
             myLocation = mSpot.location;
             name = mSpot.getName();
             Log.d(TAG, "type = " + mSpot.getType());
             Log.d(TAG, "Lat = " + lat + " Lon = " + lon);
             Log.d(TAG, "location is :" + myLocation);
         } catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 

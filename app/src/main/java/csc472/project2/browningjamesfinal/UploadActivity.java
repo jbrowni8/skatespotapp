@@ -20,12 +20,10 @@ import android.widget.Spinner;
 
 public class UploadActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     public static final String TAG = "UploadActivity";
-
     public static final int CAM_REQ_CODE = 100;
 
     private Location mBestReading;
     private LocationManager mLocationManager;
-
     private LocationListener mLocationListener;
 
 
@@ -123,12 +121,22 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
 
         name = eName.getText() + "";
         accessibleTimes = eTime.getText().toString();
-        covered = eCovered.getText().toString().equals("Yes") ? true : false;
+        covered = eCovered.getText().toString().equals("Yes");
         description = eExtras.getText() + "";
         rating = ratingBar.getRating();
 
-        spot = new SkateSpot(type, name, description, covered, rating, accessibleTimes,
-                mBestReading.getLatitude(), mBestReading.getLongitude(), mBestReading);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, mLocationListener);
+
+        try {
+            spot = new SkateSpot(type, name, description, covered, rating, accessibleTimes,
+                    mBestReading.getLatitude(), mBestReading.getLongitude(), mBestReading);
+        } catch (NullPointerException e) {
+            spot = new SkateSpot(type, name, description, covered, rating, accessibleTimes,
+                    35.000, -117.000, mBestReading);
+        }
 
         System.out.println(spot.toString());
 
@@ -136,22 +144,15 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
 
         Intent intent = new Intent(UploadActivity.this, MapsActivity.class);
 
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, mLocationListener);
+
         intent.putExtra("SkateSpot", spot);
         startActivity(intent);
         finish();
     }
 
+    public void onCancel(View v) {
+        finish();
+    }
 
     private void resetValues(EditText eName, EditText eTime,
                              EditText eExtras, RatingBar ratingBar, EditText eCovered) {
@@ -164,6 +165,11 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         spinner.setSelection(0);
     }
 
+
+    public void addSpotToMarker() {
+        System.out.println("Best guess at location is : " + mBestReading);
+    }
+
     public void onCameraClick(View v) {
         Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
         if (intent.resolveActivity(getPackageManager()) != null) {
@@ -171,7 +177,4 @@ public class UploadActivity extends AppCompatActivity implements AdapterView.OnI
         }
     }
 
-    public void onCancel(View v) {
-        finish();
-    }
 }
